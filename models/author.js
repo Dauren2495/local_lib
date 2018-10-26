@@ -32,5 +32,20 @@ AuthorSchema
   return '/catalog/author/' + this._id;
 });
 
+var moment = require('moment');
+
+AuthorSchema
+.virtual('date_of_birth_')
+.get(function() {
+	return this.date_of_birth ? moment(this.date_of_birth).format('MMMM Do, YYYY') : '';
+});
+
+AuthorSchema
+.virtual('date_of_death_')
+.get(function() {
+	return this.date_of_death ? moment(this.date_of_death).format('MMMM Do, YYYY') : '';
+});
+
+
 //Export model
 module.exports = mongoose.model('Author', AuthorSchema);
