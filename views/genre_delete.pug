@@ -1,0 +1,21 @@
+extends layout
+
+block content
+
+ h1 Genre: #{genre.name}
+
+
+ if list.length
+  p #[em First you have to delete the following books:]
+   for book in list
+    hr 
+    p #[strong Title:] #{book.title}
+    p #[strong Author:] #{book.author.name}
+
+ else
+  p #[em Are you sure you want to delete this genre?]
+  form(method='POST', action='')
+   div.form-group
+   	input#authorid.form-control(type='hidden',name='authorid', required='true', value=author._id )
+	
+   button.btn.btn-primary(type='submit') Delete

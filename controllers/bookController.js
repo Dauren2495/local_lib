@@ -156,15 +156,32 @@ exports.book_create_post = [
         }
     }
 ];
-
-// Display book delete form on GET.
 exports.book_delete_get = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book delete GET');
+    async.parallel({
+        book: function(callback) {
+            Book.findById(req.params.id)
+                .exec(callback);
+            },
+        intances: function(callback){
+            BookInstance.find({'book': req.params.id})
+                .exec(callback);
+            },
+        },
+        function(error, results){
+            if(error) {return next(error);}
+            res.render('book_delete', {book: results.book, instances: results.intances});
+        }
+    );
 };
+
 
 // Handle book delete on POST.
 exports.book_delete_post = function(req, res) {
-    res.send('NOT IMPLEMENTED: Book delete POST');
+    Book.findByIdAndRemove(req.params.id)
+        .exec(function(err, result){
+            if(err) {return next(err);}
+            res.redirect('/catalog/books');
+        });
 };
 
 // Display book update form on GET.
